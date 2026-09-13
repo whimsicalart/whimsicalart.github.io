@@ -4,6 +4,8 @@
   var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
   if (!shots.length) return;
 
+  var tracks = Array.prototype.slice.call(document.querySelectorAll('.shot-track'));
+
   var lightbox = document.querySelector('.lightbox');
   var img = document.getElementById('lightbox-img');
   var caption = document.getElementById('lightbox-caption');
@@ -31,6 +33,12 @@
     });
   });
 
+  function setPaused(paused) {
+    tracks.forEach(function (track) {
+      track.classList.toggle('paused', paused);
+    });
+  }
+
   function show(index) {
     current = (index + shots.length) % shots.length;
     var shot = shots[current];
@@ -41,6 +49,7 @@
     lastFocused = document.activeElement;
     lightbox.hidden = false;
     document.body.classList.add('scroll-lock');
+    setPaused(true);
     closeBtn.focus();
   }
 
@@ -48,6 +57,7 @@
     lightbox.hidden = true;
     document.body.classList.remove('scroll-lock');
     img.src = '';
+    setPaused(false);
     if (lastFocused && lastFocused.focus) lastFocused.focus();
   }
 
