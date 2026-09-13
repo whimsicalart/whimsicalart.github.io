@@ -293,28 +293,6 @@ a:hover {
   }
 }
 
-@media (hover: none) {
-  .shot-strip {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 8px;
-  }
-
-  .shot-strip::-webkit-scrollbar {
-    display: none;
-  }
-
-  .shot-track {
-    animation: none;
-  }
-
-  .shot {
-    scroll-snap-align: center;
-  }
-}
-
 @media (max-width: 640px) {
   .shot img {
     height: 260px;

@@ -26,23 +26,6 @@
     }
 
     shot.addEventListener('click', open);
-
-    var startX = 0;
-    var startY = 0;
-    shot.addEventListener('touchstart', function (e) {
-      var t = e.changedTouches[0];
-      startX = t.clientX;
-      startY = t.clientY;
-    }, { passive: true });
-    shot.addEventListener('touchend', function (e) {
-      var t = e.changedTouches[0];
-      var dx = t.clientX - startX;
-      var dy = t.clientY - startY;
-      if (dx * dx + dy * dy < 100) {
-        e.preventDefault();
-        show(index);
-      }
-    });
     shot.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -110,4 +93,13 @@
     if (e.key === 'ArrowLeft') step(-1);
     if (e.key === 'ArrowRight') step(1);
   });
+
+  document.addEventListener('touchstart', function () {
+    if (lightbox.hidden) setPaused(true);
+  }, { passive: true });
+  document.addEventListener('touchend', function () {
+    window.setTimeout(function () {
+      if (lightbox.hidden) setPaused(false);
+    }, 1200);
+  }, { passive: true });
 })();
