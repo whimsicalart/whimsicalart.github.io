@@ -14,6 +14,7 @@
   var nextBtn = document.querySelector('.lightbox-next');
   var lastFocused = null;
   var current = -1;
+  var fallbackSrc = '';
 
   shots.forEach(function (shot, index) {
     shot.tabIndex = 0;
@@ -25,6 +26,23 @@
     }
 
     shot.addEventListener('click', open);
+
+    var startX = 0;
+    var startY = 0;
+    shot.addEventListener('touchstart', function (e) {
+      var t = e.changedTouches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive: true });
+    shot.addEventListener('touchend', function (e) {
+      var t = e.changedTouches[0];
+      var dx = t.clientX - startX;
+      var dy = t.clientY - startY;
+      if (dx * dx + dy * dy < 100) {
+        e.preventDefault();
+        show(index);
+      }
+    });
     shot.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -39,11 +57,24 @@
     });
   }
 
+  function fullSourceFor(image) {
+    var src = image.getAttribute('src') || '';
+    if (!src) return src;
+    return src.replace(/^screenshots\/(?:phone|tablet)\//, 'screenshots/full/')
+              .replace(/\.(png|jpe?g)$/i, '.webp');
+  }
+
   function show(index) {
     current = (index + shots.length) % shots.length;
     var shot = shots[current];
     var image = shot.querySelector('img');
-    img.src = image.src;
+    var full = shot.getAttribute('data-full') || fullSourceFor(image);
+    fallbackSrc = image.src;
+    img.onerror = function () {
+      img.onerror = null;
+      img.src = fallbackSrc;
+    };
+    img.src = full;
     img.alt = image.alt;
     caption.textContent = image.alt;
     lastFocused = document.activeElement;
