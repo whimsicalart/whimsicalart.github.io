@@ -15,6 +15,8 @@
   var lastFocused = null;
   var current = -1;
   var fallbackSrc = '';
+  var justOpened = 0;
+  var lastOpenAt = 0;
 
   shots.forEach(function (shot, index) {
     shot.tabIndex = 0;
@@ -22,10 +24,18 @@
     shot.setAttribute('aria-label', 'View screenshot');
 
     function open() {
+      var now = Date.now();
+      if (now - lastOpenAt < 250) return;
+      lastOpenAt = now;
       show(index);
     }
 
     shot.addEventListener('click', open);
+    if (window.PointerEvent) {
+      shot.addEventListener('pointerup', function (e) {
+        if (e.pointerType === 'touch') open();
+      });
+    }
     shot.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -60,6 +70,7 @@
     img.src = full;
     img.alt = image.alt;
     caption.textContent = image.alt;
+    justOpened = Date.now();
     lastFocused = document.activeElement;
     lightbox.hidden = false;
     document.body.classList.add('scroll-lock');
@@ -83,8 +94,32 @@
   prevBtn.addEventListener('click', function () { step(-1); });
   nextBtn.addEventListener('click', function () { step(1); });
 
+  var swipeX = 0;
+  var swipeY = 0;
+  var lastSwipeAt = 0;
+  lightbox.addEventListener('touchstart', function (e) {
+    var t = e.changedTouches[0];
+    swipeX = t.clientX;
+    swipeY = t.clientY;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', function (e) {
+    if (lightbox.hidden) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - swipeX;
+    var dy = t.clientY - swipeY;
+    if (Math.abs(dx) < 50) return;
+    if (Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    e.preventDefault();
+    lastSwipeAt = Date.now();
+    step(dx < 0 ? 1 : -1);
+  }, { passive: false });
+
   lightbox.addEventListener('click', function (e) {
-    if (e.target === lightbox) hide();
+    if (e.target !== lightbox) return;
+    var now = Date.now();
+    if (now - justOpened < 350) return;
+    if (now - lastSwipeAt < 400) return;
+    hide();
   });
 
   document.addEventListener('keydown', function (e) {
