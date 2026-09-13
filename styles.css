@@ -204,31 +204,95 @@ a:hover {
   color: var(--text-dim);
 }
 
-/* ---------- Screenshot placeholder ---------- */
+/* ---------- Screenshot gallery ---------- */
 
-.screenshot-placeholder {
-  max-width: 560px;
-  margin: 56px auto 0;
-  aspect-ratio: 9 / 12;
-  border: 1px dashed rgba(255, 255, 255, 0.18);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.015),
-      rgba(255, 255, 255, 0.015) 12px,
-      rgba(255, 255, 255, 0.03) 12px,
-      rgba(255, 255, 255, 0.03) 24px
-    );
+.section-screenshots .container {
+  max-width: 1280px;
 }
 
-.placeholder-caption {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
+.shot-group {
+  margin-bottom: 40px;
+}
+
+.shot-group:last-child {
+  margin-bottom: 0;
+}
+
+.shot-group-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.shot-strip {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.shot-track {
+  display: flex;
+  width: max-content;
+  animation: shot-scroll 45s linear infinite;
+}
+
+.shot-set {
+  display: flex;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.shot-track:hover {
+  animation-play-state: paused;
+}
+
+.shot {
+  margin: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-raised);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.shot img {
+  display: block;
+  width: auto;
+  height: 320px;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.shot.shot-tablet img {
+  height: 240px;
+}
+
+.shot:hover img {
+  transform: scale(1.09);
+}
+
+@keyframes shot-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shot-track {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .shot img {
+    height: 260px;
+  }
+
+  .shot.shot-tablet img {
+    height: 190px;
+  }
 }
 
 /* ---------- Sections ---------- */
