@@ -255,22 +255,25 @@ a:hover {
   background: var(--bg-raised);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+  transition: transform 0.35s ease;
+  will-change: transform;
 }
 
 .shot img {
   display: block;
   width: auto;
   height: 320px;
-  transition: transform 0.35s ease;
-  will-change: transform;
 }
 
 .shot.shot-tablet img {
   height: 240px;
 }
 
-.shot:hover img {
+.shot:hover {
   transform: scale(1.09);
+  z-index: 2;
 }
 
 @keyframes shot-scroll {
