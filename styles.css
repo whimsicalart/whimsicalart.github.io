@@ -418,6 +418,89 @@ a:hover {
   max-width: 640px;
 }
 
+/* ---------- Donation page ---------- */
+
+.container.narrow {
+  max-width: 720px;
+}
+
+.notice {
+  background: var(--accent-soft);
+  border: 1px solid rgba(87, 143, 255, 0.35);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.notice h2 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+
+.notice p {
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.notice p:last-child {
+  margin-bottom: 0;
+}
+
+.notice strong {
+  color: var(--text);
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.platform-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  background: var(--bg-raised);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 600;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.platform-card:hover {
+  border-color: rgba(87, 143, 255, 0.4);
+  transform: translateY(-3px);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.platform-name {
+  font-size: 1.05rem;
+}
+
+.platform-badge {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+.section-title.sub {
+  margin-top: 48px;
+  font-size: 1.2rem;
+}
+
+#use .container.narrow > p {
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
