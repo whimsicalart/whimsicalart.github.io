@@ -161,6 +161,131 @@ a:hover {
   justify-content: center;
   flex-wrap: wrap;
   gap: 14px;
+  align-items: center;
+}
+
+/* ---------- Download dropdown ---------- */
+
+.download-dropdown {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.btn-download-main {
+  border-radius: 999px 0 0 999px;
+  padding-right: 18px;
+}
+
+.btn-download-more {
+  position: relative;
+  display: inline-flex;
+}
+
+.btn-download-more summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  padding: 0 16px;
+  background: var(--accent);
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  border-radius: 0 999px 999px 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(87, 143, 255, 0.35);
+  transition: background 0.15s ease;
+}
+
+.btn-download-more summary:hover,
+.btn-download-more[open] summary {
+  background: #3f76e8;
+}
+
+.btn-download-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.btn-download-more[open] summary {
+  border-radius: 0 999px 0 0;
+}
+
+.download-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 210px;
+  background: var(--bg-raised);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 30;
+  animation: menu-in 0.15s ease;
+}
+
+.download-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.download-option:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.opt-tag {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .download-menu {
+    min-width: 190px;
+  }
+
+  .btn-download-more summary {
+    min-width: 42px;
+    padding: 0 13px;
+  }
 }
 
 .btn {
