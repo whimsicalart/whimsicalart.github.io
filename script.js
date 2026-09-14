@@ -4,7 +4,7 @@
   var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
   if (!shots.length) return;
 
-  var tracks = Array.prototype.slice.call(document.querySelectorAll('.shot-track'));
+  var strips = Array.prototype.slice.call(document.querySelectorAll('.shot-strip'));
 
   var lightbox = document.querySelector('.lightbox');
   var img = document.getElementById('lightbox-img');
@@ -26,6 +26,7 @@
     function open() {
       var now = Date.now();
       if (now - lastOpenAt < 250) return;
+      if (now - lastDragAt < 350) return;
       lastOpenAt = now;
       show(index);
     }
@@ -44,9 +45,96 @@
     });
   });
 
+  var stripControllers = [];
+
+  var SCROLL_SPEED = 0.8;
+  var lastDragAt = 0;
+  var reducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  strips.forEach(function (strip) {
+    var paused = false;
+    var drag = null;
+    var rafId = 0;
+    var resumeTimer = 0;
+
+    function step() {
+      rafId = 0;
+      if (document.hidden) return;
+      var half = strip.scrollWidth / 2;
+      if (!paused) {
+        strip.scrollLeft += SCROLL_SPEED;
+        if (strip.scrollLeft >= half) strip.scrollLeft -= half;
+      }
+      rafId = requestAnimationFrame(step);
+    }
+
+    function pause() {
+      paused = true;
+      window.clearTimeout(resumeTimer);
+    }
+
+    function resume() {
+      paused = false;
+    }
+
+    function resumeLater(ms) {
+      window.clearTimeout(resumeTimer);
+      if (lightbox.hidden && !drag) {
+        resumeTimer = window.setTimeout(resume, ms);
+      }
+    }
+
+    stripControllers.push({ pause: pause, resume: resume });
+
+    strip.addEventListener('mouseenter', pause);
+    strip.addEventListener('mouseleave', resume);
+
+    strip.addEventListener('touchstart', pause, { passive: true });
+    strip.addEventListener('touchend', function () {
+      resumeLater(1200);
+    }, { passive: true });
+    strip.addEventListener('touchcancel', function () {
+      resumeLater(1200);
+    }, { passive: true });
+
+    if (window.PointerEvent) {
+      strip.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        drag = { id: e.pointerId, x: e.clientX, left: strip.scrollLeft, moved: false };
+        strip.setPointerCapture(e.pointerId);
+        strip.classList.add('dragging');
+        pause();
+      });
+      strip.addEventListener('pointermove', function (e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        var dx = e.clientX - drag.x;
+        if (Math.abs(dx) > 6) drag.moved = true;
+        strip.scrollLeft = drag.left - dx;
+      });
+      function endDrag(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        if (drag.moved) lastDragAt = Date.now();
+        drag = null;
+        strip.classList.remove('dragging');
+        if (strip.hasPointerCapture && strip.hasPointerCapture(e.pointerId)) {
+          strip.releasePointerCapture(e.pointerId);
+        }
+        resume();
+      }
+      strip.addEventListener('pointerup', endDrag);
+      strip.addEventListener('pointercancel', endDrag);
+    }
+
+    if (!reducedMotion) {
+      rafId = requestAnimationFrame(step);
+    }
+  });
+
   function setPaused(paused) {
-    tracks.forEach(function (track) {
-      track.classList.toggle('paused', paused);
+    stripControllers.forEach(function (c) {
+      if (paused) c.pause();
+      else c.resume();
     });
   }
 
@@ -128,13 +216,4 @@
     if (e.key === 'ArrowLeft') step(-1);
     if (e.key === 'ArrowRight') step(1);
   });
-
-  document.addEventListener('touchstart', function () {
-    if (lightbox.hidden) setPaused(true);
-  }, { passive: true });
-  document.addEventListener('touchend', function () {
-    window.setTimeout(function () {
-      if (lightbox.hidden) setPaused(false);
-    }, 1200);
-  }, { passive: true });
 })();

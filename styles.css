@@ -364,29 +364,35 @@ a:hover {
 }
 
 .shot-strip {
-  overflow: hidden;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  touch-action: pan-x pan-y;
+}
+
+.shot-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.shot-strip.dragging {
+  cursor: grabbing;
 }
 
 .shot-track {
   display: flex;
   width: max-content;
-  animation: shot-scroll 45s linear infinite;
 }
 
 .shot-set {
   display: flex;
   gap: 16px;
   padding-right: 16px;
-}
-
-.shot-track:hover {
-  animation-play-state: paused;
-}
-
-.shot-track.paused {
-  animation-play-state: paused;
 }
 
 .shot {
@@ -417,18 +423,6 @@ a:hover {
 
 .shot.shot-tablet img {
   height: 240px;
-}
-
-@keyframes shot-scroll {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .shot-track {
-    animation: none;
-  }
 }
 
 @media (max-width: 640px) {
