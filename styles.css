@@ -169,11 +169,22 @@ a:hover {
 .download-dropdown {
   display: inline-flex;
   align-items: stretch;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(87, 143, 255, 0.35);
 }
 
-.btn-download-main {
+.btn.btn-download-main {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
   border-radius: 999px 0 0 999px;
   padding-right: 18px;
+  box-shadow: none;
+}
+
+.btn.btn-download-main:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-download-more {
@@ -188,13 +199,14 @@ a:hover {
   align-items: center;
   justify-content: center;
   min-width: 46px;
+  min-height: 48px;
   padding: 0 16px;
   background: var(--accent);
   color: #FFFFFF;
   font-size: 0.95rem;
   border-radius: 0 999px 999px 0;
   border-left: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 8px 24px rgba(87, 143, 255, 0.35);
+  box-shadow: none;
   transition: background 0.15s ease;
 }
 
@@ -205,10 +217,6 @@ a:hover {
 
 .btn-download-more summary::-webkit-details-marker {
   display: none;
-}
-
-.btn-download-more[open] summary {
-  border-radius: 0 999px 0 0;
 }
 
 .download-menu {
@@ -285,6 +293,10 @@ a:hover {
   .btn-download-more summary {
     min-width: 42px;
     padding: 0 13px;
+  }
+
+  .btn-download-main {
+    min-height: 48px;
   }
 }
 
