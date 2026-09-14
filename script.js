@@ -49,6 +49,7 @@
 
   var SCROLL_SPEED = 0.8;
   var lastDragAt = 0;
+  var canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
   var reducedMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -56,7 +57,6 @@
     var paused = false;
     var drag = null;
     var rafId = 0;
-    var resumeTimer = 0;
 
     function step() {
       rafId = 0;
@@ -71,32 +71,22 @@
 
     function pause() {
       paused = true;
-      window.clearTimeout(resumeTimer);
     }
 
     function resume() {
-      paused = false;
-    }
-
-    function resumeLater(ms) {
-      window.clearTimeout(resumeTimer);
-      if (lightbox.hidden && !drag) {
-        resumeTimer = window.setTimeout(resume, ms);
-      }
+      if (lightbox.hidden) paused = false;
     }
 
     stripControllers.push({ pause: pause, resume: resume });
 
-    strip.addEventListener('mouseenter', pause);
-    strip.addEventListener('mouseleave', resume);
+    if (canHover) {
+      strip.addEventListener('mouseenter', pause);
+      strip.addEventListener('mouseleave', resume);
+    }
 
     strip.addEventListener('touchstart', pause, { passive: true });
-    strip.addEventListener('touchend', function () {
-      resumeLater(1200);
-    }, { passive: true });
-    strip.addEventListener('touchcancel', function () {
-      resumeLater(1200);
-    }, { passive: true });
+    strip.addEventListener('touchend', resume, { passive: true });
+    strip.addEventListener('touchcancel', resume, { passive: true });
 
     if (window.PointerEvent) {
       strip.addEventListener('pointerdown', function (e) {
