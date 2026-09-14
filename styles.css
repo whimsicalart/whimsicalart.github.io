@@ -223,7 +223,7 @@ a:hover {
   position: absolute;
   right: 0;
   top: calc(100% + 10px);
-  min-width: 210px;
+  min-width: 240px;
   background: var(--bg-raised);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
@@ -246,6 +246,7 @@ a:hover {
   color: var(--text);
   font-size: 0.95rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .download-option:hover {
@@ -287,7 +288,7 @@ a:hover {
 
 @media (max-width: 640px) {
   .download-menu {
-    min-width: 190px;
+    min-width: 220px;
   }
 
   .btn-download-more summary {
