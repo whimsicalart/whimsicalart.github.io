@@ -53,8 +53,8 @@
   function fullSourceFor(image) {
     var src = image.getAttribute('src') || '';
     if (!src) return src;
-    return src.replace(/^screenshots\/(?:phone|tablet)\//, 'screenshots/full/')
-              .replace(/\.(png|jpe?g)$/i, '.webp');
+    return src.replace(/^screenshots\/(?:phone|tablet)\//, 'screenshots/large/')
+              .replace(/\.png$/i, '.jpg');
   }
 
   function show(index) {
